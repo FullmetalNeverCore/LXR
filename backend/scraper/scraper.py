@@ -124,9 +124,7 @@ async def fetch_all_stations() -> list:
                 if response.status_code != 200:
                     continue
                 data = response.json()
-                if isinstance(data, list):
-                    results = [transform_station(s) for s in data if isinstance(s, dict)]
-                    return [s for s in results if s is not None]
+     
                 if isinstance(data, list):
                     all_stations.extend([transform_station(s) for s in data])
                 elif isinstance(data, dict):
