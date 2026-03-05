@@ -10,7 +10,7 @@ const logo = new URL('./assets/lxr.png', import.meta.url).href;
 function App() {
   const [geoError, setGeoError] = useState<string | null>(null);
   const [errorDismissed, setErrorDismissed] = useState(false);
-  const [radius, setRadius] = useState<number>(20);
+  const [radius, setRadius] = useState<number>(8);
   const [userLat, setUserLat] = useState<number | undefined>(undefined);
   const [userLng, setUserLng] = useState<number | undefined>(undefined);
 
@@ -41,7 +41,7 @@ function App() {
       <header className="app-header">
         <img className="logo" src={logo} alt="Latvian Xtreme Racer logo" />
         <div className="radius-control">
-        <button onClick={() => setRadius(20)}>📍 Nearby</button>
+        <button onClick={() => setRadius(8)}>📍 Nearby</button>
         <button onClick={() => setRadius(-1)}>🌍 All</button>
         </div>
       </header>
