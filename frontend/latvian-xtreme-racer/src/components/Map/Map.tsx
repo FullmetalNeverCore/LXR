@@ -1,12 +1,12 @@
 import { useEffect } from "react";
-import type { Station } from "../../types";
+import type { Station, BestPricesMap} from "../../types";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import { StationPopup } from "../StationPopup/StationPopup";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import iconUrl from "leaflet/dist/images/marker-icon.png";
 import shadowUrl from "leaflet/dist/images/marker-shadow.png";
-import {getBrandColor} from "../../utils"
+import {getBrandColor} from "../../utils";
 
 L.Icon.Default.mergeOptions({
     iconUrl,
@@ -30,8 +30,8 @@ const userLocationIcon = L.divIcon({
     popupAnchor: [0, -12],
 });
 
-function createBrandIcon(brand: string) {
-    const color = getBrandColor(brand);
+function createBrandIcon(brand: string,isBest: boolean) {
+    const color = isBest ? "#FFD700" : getBrandColor(brand);
     const html = `
       <div style="
         background: ${color};
@@ -56,6 +56,8 @@ interface MapProps{
     userLat?: number;
     userLng?: number;
     stations: Station[];
+    bestStationIds: Set<string>;
+    bestPrices:BestPricesMap;
 }
 
 function RecenterOnLocation({ lat, lng }: { lat?: number; lng?: number }) {
@@ -70,7 +72,7 @@ function RecenterOnLocation({ lat, lng }: { lat?: number; lng?: number }) {
     return null;
 }
 
-export function Map({ userLat, userLng, stations }: MapProps) {
+export function Map({ userLat, userLng, stations, bestStationIds, bestPrices}: MapProps) {
     return (
         <div style={{ width: "100%", height: "100%", position: "relative" }}>
             <MapContainer
@@ -107,11 +109,11 @@ export function Map({ userLat, userLng, stations }: MapProps) {
                 {stations.map((station) => (
                     <Marker
                         key={station.id}
-                        icon={createBrandIcon(station.brand)}
+                        icon={createBrandIcon(station.brand, bestStationIds.has(station.id))}
                         position={[station.lat, station.lng]}
                     >
                         <Popup>
-                            <StationPopup station={station} />
+                            <StationPopup station={station} bestPrices={bestPrices}/>
                         </Popup>
                     </Marker>
                 ))}

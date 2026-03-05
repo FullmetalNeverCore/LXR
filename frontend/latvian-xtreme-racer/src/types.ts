@@ -3,7 +3,9 @@ export interface FuelPrice {
     price: number;
     currency: string;
 }
-  
+
+export type BestPricesMap = Record<string, { station: Station; price: number }>
+
 export interface Station {
     id: string;
     name: string;

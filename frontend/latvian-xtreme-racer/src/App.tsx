@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import "./App.css";
 import { Map } from "./components/Map/Map";
 import { useStations } from "./hooks/useStations";
+import { useBestPrices } from "./hooks/useBestPrices";
+import { PriceTable } from "./components/PriceTable/PriceTable";
 
 const logo = new URL('./assets/lxr.png', import.meta.url).href;
 
@@ -27,6 +29,12 @@ function App() {
   }, []);
   
   const { stations, loading, error } = useStations(userLat, userLng, radius);
+
+  const bestStations= useBestPrices(stations);
+
+  const bestStationIds = new Set(
+    Object.values(bestStations).map(b => b.station.id)
+  );
 
   return (
     <div className="app-container">
@@ -65,7 +73,8 @@ function App() {
               </div>
             </div>
           )}
-          <Map userLat={userLat ?? 56.9496} userLng={userLng ?? 24.1052} stations={stations} />
+          <Map userLat={userLat ?? 56.9496} userLng={userLng ?? 24.1052} stations={stations} bestStationIds={bestStationIds} bestPrices={bestStations}/>
+          <PriceTable bestPrices={bestStations} />
         </div>
       </main>
     </div>
