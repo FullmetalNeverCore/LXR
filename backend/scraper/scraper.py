@@ -87,8 +87,8 @@ def transform_station(raw: dict) -> dict:
         "lng": lng,
         "prices": prices,
     }
-async def fetch_stations(lat: float, lng: float):
-    min_lat, min_lng, max_lat, max_lng = compute_bbox(lat, lng, radius_km=20.0)
+async def fetch_stations(lat: float, lng: float, radius_km:float = 20.0):
+    min_lat, min_lng, max_lat, max_lng = compute_bbox(lat, lng, radius_km=radius_km)
     url = f"https://gas.didnt.work/api/stations?bbox={min_lng},{min_lat},{max_lng},{max_lat}"
     try:
         async with httpx.AsyncClient(http2=False, headers=headers) as client:
@@ -97,6 +97,10 @@ async def fetch_stations(lat: float, lng: float):
             print("Status:", response.status_code)
             print("Body:", response.text[:200])
             data = response.json()
+
+            if isinstance(data, list):
+                results = [transform_station(s) for s in data if isinstance(s, dict)]
+                return [s for s in results if s is not None]
 
             if isinstance(data, dict):
                 return [transform_station(station) for station in data.values()]
@@ -120,6 +124,9 @@ async def fetch_all_stations() -> list:
                 if response.status_code != 200:
                     continue
                 data = response.json()
+                if isinstance(data, list):
+                    results = [transform_station(s) for s in data if isinstance(s, dict)]
+                    return [s for s in results if s is not None]
                 if isinstance(data, list):
                     all_stations.extend([transform_station(s) for s in data])
                 elif isinstance(data, dict):

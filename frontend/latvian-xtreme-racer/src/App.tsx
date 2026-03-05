@@ -8,17 +8,14 @@ const logo = new URL('./assets/lxr.png', import.meta.url).href;
 function App() {
   const [geoError, setGeoError] = useState<string | null>(null);
   const [errorDismissed, setErrorDismissed] = useState(false);
+  const [radius, setRadius] = useState<number>(20);
   const [userLat, setUserLat] = useState<number | undefined>(undefined);
   const [userLng, setUserLng] = useState<number | undefined>(undefined);
-  const [coords, setCoords] = useState<{ lat: number; lng: number }>({
-    lat: 56.9496,
-    lng: 24.1052,
-  });
+
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        setCoords({lat: position.coords.latitude, lng: position.coords.longitude});
         setUserLat(position.coords.latitude);
         setUserLng(position.coords.longitude);
       },
@@ -29,12 +26,16 @@ function App() {
     );
   }, []);
   
-  const { stations,loading,error } = useStations(userLat, userLng);
+  const { stations, loading, error } = useStations(userLat, userLng, radius);
 
   return (
     <div className="app-container">
       <header className="app-header">
         <img className="logo" src={logo} alt="Latvian Xtreme Racer logo" />
+        <div className="radius-control">
+        <button onClick={() => setRadius(20)}>📍 Nearby</button>
+        <button onClick={() => setRadius(-1)}>🌍 All</button>
+        </div>
       </header>
       <main className="app-main">
         <div className="map-shell">
@@ -64,7 +65,7 @@ function App() {
               </div>
             </div>
           )}
-          <Map userLat={coords.lat} userLng={coords.lng} stations={stations} />
+          <Map userLat={userLat ?? 56.9496} userLng={userLng ?? 24.1052} stations={stations} />
         </div>
       </main>
     </div>

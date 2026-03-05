@@ -19,7 +19,7 @@ const API_BASE_URL = (() => {
   );
 })();
 
-export function useStations(lat?: number, lng?: number) {
+export function useStations(lat?: number, lng?: number, radius?:number) {
     const [stations, setStations] = useState<Station[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<Error | null>(null);
@@ -33,6 +33,8 @@ export function useStations(lat?: number, lng?: number) {
             const params = new URLSearchParams();
             if (lat !== undefined) params.set("lat", String(lat));
             if (lng !== undefined) params.set("lng", String(lng));
+            params.set("radius_km", String(radius));
+            console.log("[useStations] radius value:", radius);
 
             const url = `${API_BASE_URL}/api/stations?${params.toString()}`;
             console.log("[useStations] Fetching stations", {
@@ -87,7 +89,7 @@ export function useStations(lat?: number, lng?: number) {
         return () => {
             controller.abort();
         };
-    }, [lat, lng]);
+    }, [lat, lng, radius]);
 
     return { stations, loading, error };
 }

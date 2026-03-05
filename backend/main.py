@@ -22,7 +22,12 @@ async def health():
     return {"status": "ok"}
 
 @app.get("/api/stations")
-async def get_stations(lat: Optional[float] = None, lng: Optional[float] = None):
-    if lat is None or lng is None:
+async def get_stations(
+    lat: Optional[float] = None, 
+    lng: Optional[float] = None,
+    radius_km: Optional[float] = None
+):
+    print(radius_km)
+    if lat is None or lng is None or (radius_km is not None and radius_km < 0):
         return await fetch_all_stations()
-    return await fetch_stations(lat, lng)
+    return await fetch_stations(lat, lng, radius_km or 20.0)
