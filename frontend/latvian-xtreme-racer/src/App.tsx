@@ -4,6 +4,7 @@ import { Map } from "./components/Map/Map";
 import { useStations } from "./hooks/useStations";
 
 const logo = new URL('./assets/lxr.png', import.meta.url).href;
+const [geoError, setGeoError] = useState<string | null>(null);
 
 function App() {
   const [coords, setCoords] = useState<{ lat: number; lng: number }>({
@@ -18,7 +19,7 @@ function App() {
       },
       (error) => {
         console.error(error);
-        alert('Error getting location');
+        setGeoError("Unable to get your location — showing all nearby stations");
       }
     );
   }, []);
@@ -32,6 +33,12 @@ function App() {
       </header>
       <main className="app-main">
         <div className="map-shell">
+        {geoError && (
+          <div className="error-overlay">
+            <p>📍 Location unavailable</p>
+            <p className="loading-sub">📍 {geoError}</p>
+          </div>
+        )}
         {error && (
           <div className="error-overlay">
             <p>⚠️ Failed to load stations</p>
