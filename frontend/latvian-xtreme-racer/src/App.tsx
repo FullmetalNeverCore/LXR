@@ -13,6 +13,7 @@ function App() {
   const [radius, setRadius] = useState<number>(8);
   const [userLat, setUserLat] = useState<number | undefined>(undefined);
   const [userLng, setUserLng] = useState<number | undefined>(undefined);
+  const [selectedStationId, setSelectedStationId] = useState<string | null>(null);
 
 
   useEffect(() => {
@@ -73,8 +74,8 @@ function App() {
               </div>
             </div>
           )}
-          <Map userLat={userLat ?? 56.9496} userLng={userLng ?? 24.1052} stations={stations} bestStationIds={bestStationIds} bestPrices={bestStations}/>
-          <PriceTable bestPrices={bestStations} />
+          <Map userLat={userLat ?? 56.9496} userLng={userLng ?? 24.1052} stations={stations} bestStationIds={bestStationIds} bestPrices={bestStations} selectedStationId={selectedStationId}/>
+          <PriceTable bestPrices={bestStations} onSelectStation={(id) => setSelectedStationId(id)}/>
         </div>
       </main>
     </div>

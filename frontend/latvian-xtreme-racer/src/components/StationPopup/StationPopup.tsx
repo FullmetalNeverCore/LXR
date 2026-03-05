@@ -27,6 +27,7 @@ export function StationPopup({ station, bestPrices }: StationPopupProps) {
                     </tr>
                     {station.prices.map((p) => {
                     const isWinner = bestPrices[p.fuel_type]?.station.id === station.id;
+                    console.log("popup station", station.id, station.name, station.city, station.prices);
                     return (
                         <tr key={p.fuel_type} style={{ 
                         color: isWinner ? "#FFD700" : "white",
@@ -35,6 +36,7 @@ export function StationPopup({ station, bestPrices }: StationPopupProps) {
                         <td>{isWinner ? "🏆 " : ""}{p.fuel_type}</td>
                         <td>{p.price}</td>
                         <td>{p.currency}</td>
+                        
                         </tr>
                     );
                     })}

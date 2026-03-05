@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect,useRef } from "react";
 import type { Station, BestPricesMap} from "../../types";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import { StationPopup } from "../StationPopup/StationPopup";
@@ -52,13 +52,15 @@ function createBrandIcon(brand: string,isBest: boolean) {
     });
 }
 
-interface MapProps{
+interface MapProps {
     userLat?: number;
     userLng?: number;
     stations: Station[];
     bestStationIds: Set<string>;
-    bestPrices:BestPricesMap;
+    bestPrices: BestPricesMap;
+    selectedStationId?: string | null;
 }
+
 
 function RecenterOnLocation({ lat, lng }: { lat?: number; lng?: number }) {
     const map = useMap();
@@ -72,10 +74,40 @@ function RecenterOnLocation({ lat, lng }: { lat?: number; lng?: number }) {
     return null;
 }
 
-export function Map({ userLat, userLng, stations, bestStationIds, bestPrices}: MapProps) {
+function FocusOnStation({
+    selectedStationId,
+    stations,
+    markerRefs,
+  }: {
+    selectedStationId?: string | null;
+    stations: Station[];
+    markerRefs: React.MutableRefObject<Record<string, L.Marker | null>>;
+  }) {
+    const map = useMap();
+  
+    useEffect(() => {
+      if (!selectedStationId) return;
+      const station = stations.find((s) => s.id === selectedStationId);
+      if (!station) return;
+  
+      map.setView([station.lat, station.lng], 15, { animate: true });
+  
+      const marker = markerRefs.current[selectedStationId];
+      if (marker) {
+        marker.openPopup();
+      }
+    }, [selectedStationId, stations, map]);
+  
+    return null;
+}
+
+export function Map({ userLat, userLng, stations, bestStationIds, bestPrices, selectedStationId}: MapProps) {
+    const markerRefs = useRef<Record<string, L.Marker | null>>({});
+
     return (
         <div style={{ width: "100%", height: "100%", position: "relative" }}>
             <MapContainer
+            
                 center={[userLat ?? 56.9496, userLng ?? 24.1052]}
                 zoom={13}
                 style={{
@@ -88,8 +120,13 @@ export function Map({ userLat, userLng, stations, bestStationIds, bestPrices}: M
                 attribution='© <a href="https://carto.com/">CARTO</a> © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
                 />
                 <RecenterOnLocation lat={userLat} lng={userLng} />
+                <FocusOnStation
+                    selectedStationId={selectedStationId}
+                    stations={stations}
+                    markerRefs={markerRefs}
+                />
                 {userLat !== undefined && userLng !== undefined && (
-                    <Marker position={[userLat, userLng]} icon={userLocationIcon}>
+                    <Marker position={[userLat, userLng]} icon={userLocationIcon} >
                         <Popup>
                             <div
                                 style={{
@@ -111,6 +148,9 @@ export function Map({ userLat, userLng, stations, bestStationIds, bestPrices}: M
                         key={station.id}
                         icon={createBrandIcon(station.brand, bestStationIds.has(station.id))}
                         position={[station.lat, station.lng]}
+                        ref={(ref) => {
+                            if (ref) markerRefs.current[station.id] = ref;
+                          }}
                     >
                         <Popup>
                             <StationPopup station={station} bestPrices={bestPrices}/>
