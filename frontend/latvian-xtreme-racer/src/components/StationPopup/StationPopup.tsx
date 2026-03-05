@@ -1,4 +1,4 @@
-import type { FuelPrice, Station ,BestPricesMap} from "../../types";
+import type { Station ,BestPricesMap } from "../../types";
 import "./StationPopup.css";
 import { getBrandColor } from "../../utils";
 

@@ -1,4 +1,4 @@
-import type { Station,BestPricesMap } from "../../types";
+import type { BestPricesMap } from "../../types";
 import "./PriceTable.css";
 
 
