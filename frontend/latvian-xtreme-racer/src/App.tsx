@@ -8,6 +8,8 @@ const logo = new URL('./assets/lxr.png', import.meta.url).href;
 function App() {
   const [geoError, setGeoError] = useState<string | null>(null);
   const [errorDismissed, setErrorDismissed] = useState(false);
+  const [userLat, setUserLat] = useState<number | undefined>(undefined);
+  const [userLng, setUserLng] = useState<number | undefined>(undefined);
   const [coords, setCoords] = useState<{ lat: number; lng: number }>({
     lat: 56.9496,
     lng: 24.1052,
@@ -17,6 +19,8 @@ function App() {
     navigator.geolocation.getCurrentPosition(
       (position) => {
         setCoords({lat: position.coords.latitude, lng: position.coords.longitude});
+        setUserLat(position.coords.latitude);
+        setUserLng(position.coords.longitude);
       },
       (error) => {
         console.error(error);
@@ -25,7 +29,7 @@ function App() {
     );
   }, []);
   
-  const { stations,loading,error } = useStations(coords.lat, coords.lng);
+  const { stations,loading,error } = useStations(userLat, userLng);
 
   return (
     <div className="app-container">

@@ -66,6 +66,7 @@ export function useStations(lat?: number, lng?: number) {
                 console.log("[useStations] Parsed stations count", data.length);
                 setStations(data);
                 setError(null);
+                setLoading(false);
             } catch (err) {
                 if ((err as Error).name === "AbortError") {
                     console.log("[useStations] Request aborted");
@@ -78,8 +79,6 @@ export function useStations(lat?: number, lng?: number) {
                     lng,
                 });
                 setError(err as Error);
-            } finally {
-                setLoading(false);
             }
         }
 

@@ -11,6 +11,19 @@ headers = {
     "Origin": "https://gas.didnt.work",
 }
 
+REGIONS = [
+    "20.97,55.67,24.50,57.40",
+    "24.50,55.67,28.24,57.40",
+    "20.93,53.90,24.50,56.45",
+    "24.50,53.90,26.83,56.45",
+    "21.76,57.40,25.50,59.70",
+    "25.50,57.40,28.21,59.70",
+    "14.12,49.00,18.00,52.00",
+    "18.00,49.00,24.15,52.00",
+    "14.12,52.00,18.00,54.83",
+    "18.00,52.00,24.15,54.83",
+]
+
 
 def _fix_utf8_mojibake(value: str) -> str:
     if not isinstance(value, str):
@@ -95,3 +108,30 @@ async def fetch_stations(lat: float, lng: float):
     except Exception as ex:
         print(ex)
         return []
+
+async def fetch_all_stations() -> list:
+    all_stations = []
+    async with httpx.AsyncClient(http2=False, headers=headers, timeout=30.0) as client:
+        for bbox in REGIONS:
+            try:
+                url = f"https://gas.didnt.work/api/stations?bbox={bbox}"
+                response = await client.get(url)
+                print(f"bbox={bbox} status={response.status_code}")
+                if response.status_code != 200:
+                    continue
+                data = response.json()
+                if isinstance(data, list):
+                    all_stations.extend([transform_station(s) for s in data])
+                elif isinstance(data, dict):
+                    all_stations.extend([transform_station(s) for s in data.values()])
+            except Exception as ex:
+                print(f"Failed bbox {bbox}: {ex}")
+                continue
+    seen = set()
+    unique = []
+    for s in all_stations:
+        if s["id"] not in seen:
+            seen.add(s["id"])
+            unique.append(s)
+    print(f"Total unique stations: {len(unique)}")
+    return unique
