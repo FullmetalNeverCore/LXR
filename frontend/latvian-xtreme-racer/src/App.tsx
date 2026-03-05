@@ -7,6 +7,7 @@ const logo = new URL('./assets/lxr.png', import.meta.url).href;
 
 function App() {
   const [geoError, setGeoError] = useState<string | null>(null);
+  const [errorDismissed, setErrorDismissed] = useState(false);
   const [coords, setCoords] = useState<{ lat: number; lng: number }>({
     lat: 56.9496,
     lng: 24.1052,
@@ -33,10 +34,16 @@ function App() {
       </header>
       <main className="app-main">
         <div className="map-shell">
-        {geoError && (
+        {(error || geoError) && !errorDismissed && (
           <div className="error-overlay">
-            <p>📍 Location unavailable</p>
-            <p className="loading-sub">📍 {geoError}</p>
+            <button 
+              className="error-close"
+              onClick={() => setErrorDismissed(true)}
+            >
+              ✕
+            </button>
+            <p>⚠️ {error ? "Failed to load stations" : "Location unavailable"}</p>
+            <p className="loading-sub">{error?.message ?? geoError}</p>
           </div>
         )}
         {error && (

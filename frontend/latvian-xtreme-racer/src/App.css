@@ -70,6 +70,16 @@ body {
   margin-top: 8px;
 }
 
+.error-close{
+  position: absolute;
+  top: 4%;
+  right: 4%;
+  color: white;
+  background: transparent;
+  border: none;
+  box-shadow: none; 
+  padding: 0; 
+}
 
 .error-overlay {
   background: rgba(220, 38, 38, 0.2);
