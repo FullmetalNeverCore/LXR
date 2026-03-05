@@ -75,7 +75,10 @@ function App() {
             </div>
           )}
           <Map userLat={userLat ?? 56.9496} userLng={userLng ?? 24.1052} stations={stations} bestStationIds={bestStationIds} bestPrices={bestStations} selectedStationId={selectedStationId}/>
-          <PriceTable bestPrices={bestStations} onSelectStation={(id) => setSelectedStationId(id)}/>
+          <PriceTable bestPrices={bestStations} onSelectStation={(id) => {
+            setSelectedStationId(null);
+            setTimeout(() => setSelectedStationId(id), 50);
+          }}/>
         </div>
       </main>
     </div>

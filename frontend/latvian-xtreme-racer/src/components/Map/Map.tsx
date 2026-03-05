@@ -91,7 +91,14 @@ function FocusOnStation({
       if (!station) return;
   
       map.setView([station.lat, station.lng], 15, { animate: true });
-  
+      
+      setTimeout(() => {
+        const marker = markerRefs.current[selectedStationId];
+        if (marker) {
+          marker.openPopup();
+        }
+      }, 500);
+
       const marker = markerRefs.current[selectedStationId];
       if (marker) {
         marker.openPopup();
