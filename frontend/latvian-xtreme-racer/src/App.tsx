@@ -4,9 +4,9 @@ import { Map } from "./components/Map/Map";
 import { useStations } from "./hooks/useStations";
 
 const logo = new URL('./assets/lxr.png', import.meta.url).href;
-const [geoError, setGeoError] = useState<string | null>(null);
 
 function App() {
+  const [geoError, setGeoError] = useState<string | null>(null);
   const [coords, setCoords] = useState<{ lat: number; lng: number }>({
     lat: 56.9496,
     lng: 24.1052,
