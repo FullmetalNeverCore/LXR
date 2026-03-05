@@ -183,3 +183,13 @@ body {
 .read-the-docs {
   color: #000000;
 }
+
+@media (max-width: 768px) {
+  .radius-control {
+    left: 50%;
+    bottom: 16px;
+    transform: translateX(-50%);
+
+    max-width: calc(100vw - 32px);
+  }
+}
