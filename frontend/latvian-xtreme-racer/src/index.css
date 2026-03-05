@@ -54,6 +54,10 @@ body {
   min-width: 320px;
   min-height: 100vh;
 }
+
+.leaflet-control-attribution {
+  display: none !important;
+}
 .leaflet-popup-content-wrapper {
   background: transparent !important;
   box-shadow: none !important;
