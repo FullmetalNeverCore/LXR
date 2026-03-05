@@ -23,7 +23,7 @@ function App() {
     );
   }, []);
   
-  const { stations } = useStations(coords.lat, coords.lng);
+  const { stations,loading,error } = useStations(coords.lat, coords.lng);
 
   return (
     <div className="app-container">
@@ -32,6 +32,14 @@ function App() {
       </header>
       <main className="app-main">
         <div className="map-shell">
+        {loading && (
+            <div className="loading-overlay">
+              <div className="loading-content">
+                <p>⛽ Loading fuel stations...</p>
+                <p className="loading-sub">This may take up to 50s on first load</p>
+              </div>
+            </div>
+          )}
           <Map userLat={coords.lat} userLng={coords.lng} stations={stations} />
         </div>
       </main>
