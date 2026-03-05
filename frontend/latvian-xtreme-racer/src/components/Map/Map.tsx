@@ -82,8 +82,8 @@ export function Map({ userLat, userLng, stations }: MapProps) {
                 }}
             >
                 <TileLayer
-                    url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
-                    attribution='© <a href="https://stadiamaps.com/">Stadia Maps</a> © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+                attribution='© <a href="https://carto.com/">CARTO</a> © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
                 />
                 <RecenterOnLocation lat={userLat} lng={userLng} />
                 {userLat !== undefined && userLng !== undefined && (
