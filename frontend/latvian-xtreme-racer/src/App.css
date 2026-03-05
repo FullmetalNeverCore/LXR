@@ -70,6 +70,24 @@ body {
   margin-top: 8px;
 }
 
+.error-overlay {
+  background: rgba(220, 38, 38, 0.2);
+  border: 1px solid rgba(220, 38, 38, 0.4);
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  padding: 24px 32px;
+  text-align: center;
+  font-weight: 900; 
+  backdrop-filter: blur(10px);
+  border-radius: 10px;
+  color: #ffffff;
+  min-width: 200px;
+}
+
 .app-main {
   position: absolute;
   inset: 0;

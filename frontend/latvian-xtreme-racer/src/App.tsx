@@ -32,6 +32,12 @@ function App() {
       </header>
       <main className="app-main">
         <div className="map-shell">
+        {error && (
+          <div className="error-overlay">
+            <p>⚠️ Failed to load stations</p>
+            <p className="loading-sub">{error.message}</p>
+          </div>
+        )}
         {loading && (
             <div className="loading-overlay">
               <div className="loading-content">
