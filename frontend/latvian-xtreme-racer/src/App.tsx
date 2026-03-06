@@ -41,6 +41,7 @@ function App() {
     <div className="app-container">
       <header className="app-header">
         <img className="logo" src={logo} alt="Latvian Xtreme Racer logo" />
+        <p>Fuel Prices updates once in 5 hours!</p>
         <div className="radius-control">
         <button onClick={() => setRadius(8)}>📍 Nearby</button>
         <button onClick={() => setRadius(-1)}>🌍 All</button>
