@@ -46,6 +46,10 @@ body {
   );
 }
 
+.notice{
+  font-size: 13px;
+}
+
 .loading-overlay {
   position: absolute;
   top: 50%;
